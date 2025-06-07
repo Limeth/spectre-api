@@ -147,7 +147,7 @@ bool spectre_elog(SpectreLogEvent *event);
     _a > _b ? _a : _b; })
 #endif
 #define spectre_default(__default, __value) ({ __typeof__ (__value) _v = (__value); _v? _v: (__default); })
-#define spectre_default_num(__default, __num) ({ __typeof__ (__num) _n = (__num); !isnan( _n )? (__typeof__ (__default))_n: (__default); })
+#define spectre_default_flt(__default, __flt) ({ __typeof__ (__flt) _n = (__flt); !isnan( _n )? (__typeof__ (__default))_n: (__default); })
 #else
 #ifndef min
 #define min(a, b) ( (a) < (b) ? (a) : (b) )
@@ -156,7 +156,7 @@ bool spectre_elog(SpectreLogEvent *event);
 #define max(a, b) ( (a) > (b) ? (a) : (b) )
 #endif
 #define spectre_default(__default, __value) ( (__value)? (__value): (__default) )
-#define spectre_default_num(__default, __num) ( !isnan( (__num) )? (__num): (__default) )
+#define spectre_default_flt(__default, __flt) ( !isnan( (__flt) )? (__flt): (__default) )
 #endif
 
 
