@@ -22,7 +22,7 @@ SPECTRE_LIBS_END
 
 //// Types.
 
-typedef spectre_enum( unsigned int, SpectreFormat ) {
+spectre_enum_begin( unsigned int, SpectreFormat ) {
     /** Do not marshal. */
     SpectreFormatNone,
     /** Marshal using the line-based plain-text format. */
@@ -37,9 +37,9 @@ typedef spectre_enum( unsigned int, SpectreFormat ) {
 #endif
     SpectreFormatFirst = SpectreFormatFlat,
     SpectreFormatLast = SpectreFormatJSON,
-};
+} spectre_enum_end( unsigned int, SpectreFormat );
 
-typedef spectre_enum( unsigned int, SpectreMarshalErrorType ) {
+spectre_enum_begin( unsigned int, SpectreMarshalErrorType ) {
     /** The marshalling operation completed successfully. */
     SpectreMarshalSuccess,
     /** An error in the structure of the marshall file interrupted marshalling. */
@@ -54,7 +54,7 @@ typedef spectre_enum( unsigned int, SpectreMarshalErrorType ) {
     SpectreMarshalErrorIllegal,
     /** An internal system error interrupted marshalling. */
     SpectreMarshalErrorInternal,
-};
+} spectre_enum_end( unsigned int, SpectreMarshalErrorType );
 
 typedef struct SpectreMarshalError {
     /** The status of the most recent processing operation. */

@@ -37,28 +37,36 @@ SPECTRE_LIBS_END
 #endif
 
 #ifdef NS_ENUM
-#define spectre_enum(_type, _name) NS_ENUM(_type, _name)
+#define spectre_enum_begin(_type, _name) typedef NS_ENUM(_type, _name)
+#define spectre_enum_end(_type, _name)
 #elif defined(CF_ENUM)
-#define spectre_enum(_type, _name) CF_ENUM(_type, _name)
+#define spectre_enum_begin(_type, _name) typedef CF_ENUM(_type, _name)
+#define spectre_enum_end(_type, _name)
 #elif __has_extension( c_fixed_enum ) || __has_extension( objc_fixed_enum ) || __has_extension( cxx_fixed_enum )
-#define spectre_enum(_type, _name) _type _name; enum _name : _type
+#define spectre_enum_begin(_type, _name) typedef enum : _type
+#define spectre_enum_end(_type, _name) _name
 #else
-#define spectre_enum(_type, _name) _type _name; enum _name
+#define spectre_enum_begin(_type, _name) typedef _type _name; enum _name
+#define spectre_enum_end(_type, _name)
 #endif
 
 #ifdef NS_OPTIONS
-#define spectre_opts(_type, _name) NS_OPTIONS(_type, _name)
+#define spectre_opts_begin(_type, _name) typedef NS_OPTIONS(_type, _name)
+#define spectre_opts_end(_type, _name)
 #elif defined(CF_OPTIONS)
-#define spectre_opts(_type, _name) CF_OPTIONS(_type, _name)
+#define spectre_opts_begin(_type, _name) typedef CF_OPTIONS(_type, _name)
+#define spectre_opts_end(_type, _name)
 #elif __has_extension( c_fixed_enum ) || __has_extension( objc_fixed_enum ) || __has_extension( cxx_fixed_enum )
-#define spectre_opts(_type, _name) _type _name; enum _name : _type
+#define spectre_opts_begin(_type, _name) typedef enum : _type
+#define spectre_opts_end(_type, _name) _name
 #else
-#define spectre_opts(_type, _name) _type _name; enum _name
+#define spectre_opts(_type, _name) typedef _type _name; enum _name
+#define spectre_opts_end(_type, _name)
 #endif
 
 //// Types.
 
-typedef spectre_enum( unsigned int, SpectreAlgorithm ) {
+spectre_enum_begin( unsigned int, SpectreAlgorithm ) {
     /** (2012-03-05) V0 incorrectly performed host-endian math with bytes translated into 16-bit network-endian. */
     SpectreAlgorithmV0,
     /** (2012-07-17) V1 incorrectly sized site name fields by character count rather than byte count. */
@@ -71,7 +79,7 @@ typedef spectre_enum( unsigned int, SpectreAlgorithm ) {
     SpectreAlgorithmCurrent = SpectreAlgorithmV3,
     SpectreAlgorithmFirst = SpectreAlgorithmV0,
     SpectreAlgorithmLast = SpectreAlgorithmV3,
-};
+} spectre_enum_end( unsigned int, SpectreAlgorithm );
 
 typedef struct {
     /** SHA-256-sized hash */
@@ -99,27 +107,27 @@ typedef struct {
     const SpectreAlgorithm algorithm;
 } SpectreSiteKey;
 
-typedef spectre_enum( uint8_t, SpectreKeyPurpose ) {
+spectre_enum_begin( uint8_t, SpectreKeyPurpose ) {
     /** Generate a key for authentication. */
     SpectreKeyPurposeAuthentication,
     /** Generate a name for identification. */
     SpectreKeyPurposeIdentification,
     /** Generate a recovery token. */
     SpectreKeyPurposeRecovery,
-};
+} spectre_enum_end( uint8_t, SpectreKeyPurpose );
 
 // bit 4 - 9
-typedef spectre_opts( uint16_t, SpectreResultClass ) {
+spectre_opts_begin( uint16_t, SpectreResultClass ) {
     /** Use the site key to generate a result from a template. */
     SpectreResultClassTemplate = 1 << 4,
     /** Use the site key to encrypt and decrypt a stateful entity. */
     SpectreResultClassStateful = 1 << 5,
     /** Use the site key to derive a site-specific object. */
     SpectreResultClassDerive = 1 << 6,
-};
+} spectre_opts_end( uint16_t, SpectreResultClass );
 
 // bit 10 - 15
-typedef spectre_opts( uint16_t, SpectreResultFeature ) {
+spectre_opts_begin( uint16_t, SpectreResultFeature ) {
     SpectreResultFeatureNone = 0,
     /** Export the key-protected content data. */
     SpectreResultFeatureExportContent = 1 << 10,
@@ -127,10 +135,10 @@ typedef spectre_opts( uint16_t, SpectreResultFeature ) {
     SpectreResultFeatureDevicePrivate = 1 << 11,
     /** Don't use this as the primary authentication result type. */
     SpectreResultFeatureAlternate = 1 << 12,
-};
+} spectre_opts_end( uint16_t, SpectreResultFeature );
 
 // bit 0-3 | SpectreResultClass | SpectreResultFeature
-typedef spectre_enum( uint32_t, SpectreResultType ) {
+spectre_enum_begin( uint32_t, SpectreResultType ) {
     /** 0: Don't produce a result */
     SpectreResultNone = 0,
 
@@ -161,9 +169,9 @@ typedef spectre_enum( uint32_t, SpectreResultType ) {
 
     SpectreResultDefaultResult = SpectreResultTemplateLong,
     SpectreResultDefaultLogin = SpectreResultTemplateName,
-};
+} spectre_enum_end( uint32_t, SpectreResultType );
 
-typedef spectre_enum( uint32_t, SpectreCounter ) {
+spectre_enum_begin( uint32_t, SpectreCounter ) {
     /** Use a time-based counter value, resulting in a TOTP generator. */
     SpectreCounterTOTP = 0,
     /** The initial value for a site's counter. */
@@ -172,10 +180,10 @@ typedef spectre_enum( uint32_t, SpectreCounter ) {
     SpectreCounterDefault = SpectreCounterInitial,
     SpectreCounterFirst = SpectreCounterTOTP,
     SpectreCounterLast = UINT32_MAX,
-};
+} spectre_enum_end( uint32_t, SpectreCounter );
 
 /** These colours are compatible with the original ANSI SGR. */
-typedef spectre_enum( uint8_t, SpectreIdenticonColor ) {
+spectre_enum_begin( uint8_t, SpectreIdenticonColor ) {
     SpectreIdenticonColorUnset,
     SpectreIdenticonColorRed,
     SpectreIdenticonColorGreen,
@@ -187,7 +195,7 @@ typedef spectre_enum( uint8_t, SpectreIdenticonColor ) {
 
     SpectreIdenticonColorFirst = SpectreIdenticonColorRed,
     SpectreIdenticonColorLast = SpectreIdenticonColorMono,
-};
+} spectre_enum_end( uint8_t, SpectreIdenticonColor );
 
 typedef struct {
     const char *leftArm;

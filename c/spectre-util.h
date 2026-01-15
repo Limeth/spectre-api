@@ -53,7 +53,7 @@ SPECTRE_LIBS_END
 ///    A log event's complete message is resolved through its .formatter, prefixed with its severity and terminated by a newline.
 ///    The default spectre_log_sink_file_target is stderr, yielding a default behaviour that writes log events to the system's standard error.
 
-typedef spectre_enum( int, SpectreLogLevel ) {
+spectre_enum_begin( int, SpectreLogLevel ) {
     /** Logging internal state. */
     SpectreLogLevelTrace = 3,
     /** Logging state and events interesting when investigating issues. */
@@ -66,7 +66,7 @@ typedef spectre_enum( int, SpectreLogLevel ) {
     SpectreLogLevelError = -1,
     /** Inpermissible, unrecoverable state pollution requiring abortion. */
     SpectreLogLevelFatal = -2,
-};
+} spectre_enum_end( int, SpectreLogLevel );
 extern SpectreLogLevel spectre_verbosity;
 
 /** A log event describes a message emitted through the log subsystem. */
