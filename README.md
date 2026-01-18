@@ -49,10 +49,9 @@ Requirements:
 
 To build the library
 
-``` shellsession
-$ meson setup build
-$ cd build
-$ ninja
+```sh
+meson setup build
+meson compile -C build
 ```
 
 ## Components
