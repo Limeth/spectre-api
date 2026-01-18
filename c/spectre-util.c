@@ -542,7 +542,7 @@ char *spectre_hex(const uint8_t *buf, const size_t size, char *hex, size_t *hexS
         return NULL;
 
     for (size_t kH = 0; kH < size; kH++)
-        if (sprintf( &(hex[kH * 2]), "%.2hhX", buf[kH] ) != 2) {
+        if (sprintf( &(hex[kH * 2]), "%02hhX", buf[kH] ) != 2) {
             wrn( "Could not encode %u: %s", buf[kH], strerror( errno ) );
             return NULL;
         }
